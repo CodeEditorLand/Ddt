@@ -22,7 +22,8 @@ Example usage:
 
 `ddt profile instruments cargo -t 'Allocations' --release --test snapshot`
 
-This will build a binary using `cargo`, codesign the binary, and run the binary with the `Allocations` instrument in Instruments.app.
+This will build a binary using `cargo`, codesign the binary, and run the binary
+with the `Allocations` instrument in Instruments.app.
 
 # `ddt git`
 
@@ -34,7 +35,8 @@ This command allows you to resolve conflicts in lockfiles automatically.
 
 Credit: https://github.com/Praqma/git-merge-driver#documentation
 
-Add a custom merge driver to your **global** gitconfig file. (Typically `~/.gitconfig`)
+Add a custom merge driver to your **global** gitconfig file. (Typically
+`~/.gitconfig`)
 
 ```gitconfig
 [merge "ddt-auto"]
@@ -43,12 +45,13 @@ Add a custom merge driver to your **global** gitconfig file. (Typically `~/.gitc
 
 ```
 
-then, add some entries to the `.gitattributes` of your project.
-You can specify this multiple times.
+then, add some entries to the `.gitattributes` of your project. You can specify
+this multiple times.
 
-If your project uses `pnpm` and `cargo` for managing dependencies, you can add this to `.gitattributes`:
+If your project uses `pnpm` and `cargo` for managing dependencies, you can add
+this to `.gitattributes`:
 
 ```gitattributes
- pnpm.yaml merge=ddt-auto
- Cargo.lock merge=ddt-auto
+pnpm.yaml merge=ddt-auto
+Cargo.lock merge=ddt-auto
 ```

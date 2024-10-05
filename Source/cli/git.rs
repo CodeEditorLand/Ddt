@@ -7,21 +7,21 @@ use crate::util::{wrap, PrettyCmd};
 /// Some misc comamnds for git.
 #[derive(Debug, Args)]
 pub struct GitCommand {
-    #[clap(subcommand)]
-    cmd: Inner,
+	#[clap(subcommand)]
+	cmd: Inner,
 }
 
 impl GitCommand {
-    pub async fn run(self) -> Result<()> {
-        match self.cmd {
-            Inner::ResolveConflict(cmd) => cmd.run().await,
-        }
-    }
+	pub async fn run(self) -> Result<()> {
+		match self.cmd {
+			Inner::ResolveConflict(cmd) => cmd.run().await,
+		}
+	}
 }
 
 #[derive(Debug, Subcommand)]
 enum Inner {
-    ResolveConflict(ResolveConflictCommand),
+	ResolveConflict(ResolveConflictCommand),
 }
 
 /// Resolve merge conflicts in the lockfile.
@@ -31,41 +31,41 @@ enum Inner {
 /// generate the lockfile.
 #[derive(Debug, Args)]
 struct ResolveConflictCommand {
-    args: Vec<String>,
+	args: Vec<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 enum LockfileType {
-    Pnpm,
-    Yarn,
-    Npm,
-    Cargo,
+	Pnpm,
+	Yarn,
+	Npm,
+	Cargo,
 }
 impl LockfileType {
-    pub fn from_suffix(s: &str) -> Result<Self> {
-        if s.ends_with("pnpm-lock.yaml") {
-            return Ok(Self::Pnpm);
-        }
+	pub fn from_suffix(s: &str) -> Result<Self> {
+		if s.ends_with("pnpm-lock.yaml") {
+			return Ok(Self::Pnpm);
+		}
 
-        if s.ends_with("yarn.lock") {
-            return Ok(Self::Yarn);
-        }
+		if s.ends_with("yarn.lock") {
+			return Ok(Self::Yarn);
+		}
 
-        if s.ends_with("package-lock.json") {
-            return Ok(Self::Npm);
-        }
+		if s.ends_with("package-lock.json") {
+			return Ok(Self::Npm);
+		}
 
-        if s.ends_with("Cargo.lock") {
-            return Ok(Self::Cargo);
-        }
+		if s.ends_with("Cargo.lock") {
+			return Ok(Self::Cargo);
+		}
 
-        bail!("unknown lockfile type: `{}`", s)
-    }
+		bail!("unknown lockfile type: `{}`", s)
+	}
 }
 
 impl ResolveConflictCommand {
-    pub async fn run(self) -> Result<()> {
-        wrap(async move {
+	pub async fn run(self) -> Result<()> {
+		wrap(async move {
             if self.args.len() != 5 {
                 bail!(
                     "The ddt-lockfile merge driver expects 5 arguments. Please ensure that you \
@@ -119,5 +119,5 @@ impl ResolveConflictCommand {
         })
         .await
         .context("failed to resolve lockfile conflict")
-    }
+	}
 }

@@ -2,7 +2,9 @@ use anyhow::Result;
 use clap::{Parser, Subcommand};
 
 use self::{
-	extra::ExtraCommand, git::GitCommand, profile::ProfileCommand,
+	extra::ExtraCommand,
+	git::GitCommand,
+	profile::ProfileCommand,
 	solve_version::SolveVersionsCommand,
 };
 
@@ -15,7 +17,7 @@ mod util;
 #[derive(Debug, Parser)]
 pub struct CliArgs {
 	#[clap(subcommand)]
-	cmd: InnerCmd,
+	cmd:InnerCmd,
 }
 
 impl CliArgs {

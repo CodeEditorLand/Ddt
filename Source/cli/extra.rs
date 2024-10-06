@@ -7,7 +7,7 @@ use crate::util::wrap;
 #[derive(Debug, Args)]
 pub struct ExtraCommand {
 	#[clap(subcommand)]
-	cmd: Inner,
+	cmd:Inner,
 }
 
 impl ExtraCommand {

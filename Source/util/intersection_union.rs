@@ -1,7 +1,7 @@
 pub trait Intersect: Sized {
 	type Error;
 
-	fn intersect(self, other: Self) -> Result<Self, Self::Error>;
+	fn intersect(self, other:Self) -> Result<Self, Self::Error>;
 }
 
 impl<T> Intersect for Option<T>
@@ -10,7 +10,7 @@ where
 {
 	type Error = T::Error;
 
-	fn intersect(self, other: Self) -> Result<Self, Self::Error> {
+	fn intersect(self, other:Self) -> Result<Self, Self::Error> {
 		Ok(match (self, other) {
 			(Some(a), Some(b)) => Some(a.intersect(b)?),
 			(Some(a), None) => Some(a),
@@ -30,7 +30,7 @@ mod semver {
 		/// - Some if the result is a vector.
 		type Error = Option<Vec<Self>>;
 
-		fn intersect(self, other: Self) -> Result<Self, Self::Error> {
+		fn intersect(self, other:Self) -> Result<Self, Self::Error> {
 			if self == other {
 				return Ok(self);
 			}
@@ -52,8 +52,8 @@ mod semver {
 	}
 
 	fn fold_into_comparators(
-		to: Vec<Comparator>,
-		new: Comparator,
+		to:Vec<Comparator>,
+		new:Comparator,
 	) -> Result<Vec<Comparator>, Vec<Comparator>> {
 		match to.len() {
 			0 => Ok(vec![new]),
@@ -72,11 +72,9 @@ mod semver {
 	impl Intersect for VersionReq {
 		type Error = ();
 
-		fn intersect(self, other: Self) -> Result<Self, Self::Error> {
-			let comparators = self
-				.comparators
-				.into_iter()
-				.try_fold(other.comparators, fold_into_comparators);
+		fn intersect(self, other:Self) -> Result<Self, Self::Error> {
+			let comparators =
+				self.comparators.into_iter().try_fold(other.comparators, fold_into_comparators);
 
 			let comparators = match comparators {
 				Ok(v) => v,

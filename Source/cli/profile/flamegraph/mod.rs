@@ -9,25 +9,25 @@ mod run;
 
 #[derive(Debug, Args)]
 pub(super) struct FlamegraphCommand {
-    #[clap(subcommand)]
-    cmd: Inner,
+	#[clap(subcommand)]
+	cmd:Inner,
 }
 
 impl FlamegraphCommand {
-    pub async fn run(self) -> Result<()> {
-        wrap(async move {
-            match self.cmd {
-                Inner::Run(cmd) => cmd.run(Default::default()).await,
-                Inner::Cargo(cmd) => cmd.run().await,
-            }
-        })
-        .await
-        .context("failed to create flamegraph")
-    }
+	pub async fn run(self) -> Result<()> {
+		wrap(async move {
+			match self.cmd {
+				Inner::Run(cmd) => cmd.run(Default::default()).await,
+				Inner::Cargo(cmd) => cmd.run().await,
+			}
+		})
+		.await
+		.context("failed to create flamegraph")
+	}
 }
 
 #[derive(Debug, Subcommand)]
 enum Inner {
-    Run(RunCommand),
-    Cargo(CargoCommand),
+	Run(RunCommand),
+	Cargo(CargoCommand),
 }

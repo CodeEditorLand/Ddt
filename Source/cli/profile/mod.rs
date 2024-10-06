@@ -3,7 +3,8 @@ use clap::{Args, Subcommand};
 use samply::SamplyCommand;
 
 use self::{
-	cpu_per_fn::CpuPerFnCommand, flamegraph::FlamegraphCommand,
+	cpu_per_fn::CpuPerFnCommand,
+	flamegraph::FlamegraphCommand,
 	instruments::InstrumentsCommand,
 };
 
@@ -17,7 +18,7 @@ mod util;
 #[derive(Debug, Args)]
 pub struct ProfileCommand {
 	#[clap(subcommand)]
-	cmd: Inner,
+	cmd:Inner,
 }
 
 impl ProfileCommand {

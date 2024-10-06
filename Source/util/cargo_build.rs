@@ -14,53 +14,53 @@ use tracing::info;
 /// Built bin file.
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct BinFile {
-	pub path: PathBuf,
+	pub path:PathBuf,
 	/// `.dSYM`,
-	pub extra_files: Vec<PathBuf>,
-	pub profile: ArtifactProfile,
+	pub extra_files:Vec<PathBuf>,
+	pub profile:ArtifactProfile,
 
-	pub crate_name: String,
-	pub manifest_path: PathBuf,
+	pub crate_name:String,
+	pub manifest_path:PathBuf,
 }
 
 #[derive(Debug, Clone, Parser)]
 pub struct CargoBuildTarget {
 	#[clap(long)]
-	lib: bool,
+	lib:bool,
 
 	#[clap(long)]
-	release: bool,
+	release:bool,
 
 	#[clap(long)]
-	bin: Option<String>,
+	bin:Option<String>,
 
 	#[clap(long)]
-	bench: Option<String>,
+	bench:Option<String>,
 
 	#[clap(long)]
-	benches: bool,
+	benches:bool,
 
 	#[clap(long)]
-	test: Option<String>,
+	test:Option<String>,
 
 	#[clap(long)]
-	tests: bool,
+	tests:bool,
 
 	#[clap(long)]
-	example: Option<String>,
+	example:Option<String>,
 
 	#[clap(long)]
-	examples: bool,
+	examples:bool,
 
 	#[clap(long)]
-	features: Option<Vec<String>>,
+	features:Option<Vec<String>>,
 
 	#[clap(long = "package", short = 'p')]
-	packages: Vec<String>,
+	packages:Vec<String>,
 }
 
 /// Compile one or more targets.
-pub fn compile(config: &CargoBuildTarget) -> Result<Vec<BinFile>> {
+pub fn compile(config:&CargoBuildTarget) -> Result<Vec<BinFile>> {
 	let cargo = env::var("CARGO").unwrap_or_else(|_| "cargo".into());
 
 	let mut cmd = Command::new(&cargo);
@@ -141,18 +141,14 @@ pub fn compile(config: &CargoBuildTarget) -> Result<Vec<BinFile>> {
 					});
 
 					binaries.push(BinFile {
-						path: match executable {
+						path:match executable {
 							Some(v) => v.into(),
 							None => continue,
 						},
-						extra_files: artifact
-							.filenames
-							.into_iter()
-							.map(From::from)
-							.collect(),
-						profile: artifact.profile,
-						manifest_path: artifact.manifest_path.into(),
-						crate_name: artifact.target.name,
+						extra_files:artifact.filenames.into_iter().map(From::from).collect(),
+						profile:artifact.profile,
+						manifest_path:artifact.manifest_path.into(),
+						crate_name:artifact.target.name,
 					});
 					continue;
 				}
@@ -175,9 +171,9 @@ pub fn compile(config: &CargoBuildTarget) -> Result<Vec<BinFile>> {
 		}
 	}
 
-	let _output = child.wait().with_context(|| {
-		format!("Couldn't get cargo's exit status\n{}", cmd_str)
-	})?;
+	let _output = child
+		.wait()
+		.with_context(|| format!("Couldn't get cargo's exit status\n{}", cmd_str))?;
 
 	if binaries.is_empty() {
 		bail!("cargo did not produce any useful binary\n{}", cmd_str)

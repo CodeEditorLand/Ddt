@@ -16,19 +16,18 @@ pub struct SolveVersionsCommand {
 	///
 	/// Defaults to the direct dependencies of the current cargo workspace.
 	#[clap(short = 'p', long = "package")]
-	pub intersecting_packages: Vec<PackageName>,
+	pub intersecting_packages:Vec<PackageName>,
 
 	/// Require these packages to be satisfied by the solution.
 	#[clap(short = 'r', long = "require")]
-	pub constraints: Vec<Dependency>,
+	pub constraints:Vec<Dependency>,
 }
 
 impl SolveVersionsCommand {
 	pub async fn run(self) -> Result<()> {
 		wrap(async move {
 			//
-			let intersecting_packages = if self.intersecting_packages.is_empty()
-			{
+			let intersecting_packages = if self.intersecting_packages.is_empty() {
 				self.get_direct_deps_of_current_cargo_workspace()?
 			} else {
 				self.intersecting_packages
@@ -36,15 +35,15 @@ impl SolveVersionsCommand {
 
 			let solution = solve(
 				Arc::new(Constraints {
-					candidate_packages: intersecting_packages,
-					compatible_packages: self.constraints,
+					candidate_packages:intersecting_packages,
+					compatible_packages:self.constraints,
 				}),
 				Arc::new(CargoPackageManager),
 			)
 			.await?;
 
-			let s = serde_json::to_string_pretty(&solution)
-				.context("failed to serialize solution")?;
+			let s =
+				serde_json::to_string_pretty(&solution).context("failed to serialize solution")?;
 
 			println!("{}", s);
 			Ok(())
@@ -53,9 +52,7 @@ impl SolveVersionsCommand {
 		.context("failed to solve versions")
 	}
 
-	fn get_direct_deps_of_current_cargo_workspace(
-		&self,
-	) -> Result<Vec<PackageName>> {
+	fn get_direct_deps_of_current_cargo_workspace(&self) -> Result<Vec<PackageName>> {
 		let ws = cargo_metadata::MetadataCommand::new()
 			.exec()
 			.context("failed to run `cargo metadata`")?;

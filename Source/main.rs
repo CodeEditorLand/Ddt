@@ -15,22 +15,22 @@ mod util;
 #[tokio::main]
 
 async fn main() -> Result<()> {
-    tracing_subscriber::fmt()
-        .with_target(false)
-        .with_timer(tracing_subscriber::fmt::time::uptime())
-        .with_level(true)
-        .pretty()
-        .init();
+	tracing_subscriber::fmt()
+		.with_target(false)
+		.with_timer(tracing_subscriber::fmt::time::uptime())
+		.with_level(true)
+		.pretty()
+		.init();
 
-    let args = CliArgs::parse();
+	let args = CliArgs::parse();
 
-    let start = std::time::Instant::now();
+	let start = std::time::Instant::now();
 
-    info!("Start");
+	info!("Start");
 
-    args.run().await?;
+	args.run().await?;
 
-    info!("End in {:?}", start.elapsed());
+	info!("End in {:?}", start.elapsed());
 
-    Ok(())
+	Ok(())
 }
